@@ -141,7 +141,6 @@ Supporting future horizontal scaling
 <img width="1566" height="510" alt="image" src="https://github.com/user-attachments/assets/ca03b111-cd81-434c-a7f1-96b2536f181d" />
 
 
-
 ## Network Mapping
 The ALB was deployed across two public subnets for high availability.
 | Subnet          | Purpose             |
@@ -201,6 +200,8 @@ If the target becomes unhealthy, the ALB stops sending traffic to it
 | Protocol | Port | Action                        |
 | -------- | ---- | ----------------------------- |
 | HTTP     | 80   | Forward to `web-target-group` |
+<img width="1516" height="440" alt="image" src="https://github.com/user-attachments/assets/e69c0c6e-13fe-43d3-a095-ea7497beff5b" />
+
 
 ## Public Access
 Users access the application using the ALB DNS name.
