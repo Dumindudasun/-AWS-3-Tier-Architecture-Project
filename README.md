@@ -59,7 +59,19 @@ Database Tier (RDS)
 
 ```
 
+## Create VPC
+Region: us-east-1
+
+Create VPC:
+
+Name: three-tier-vpc
+
+CIDR: 10.0.0.0/16
+<img width="1701" height="557" alt="image" src="https://github.com/user-attachments/assets/b39a54f9-04b9-4bc2-acaf-7d449e246ccb" />
+
 ## Network Layout (VPC)
+<img width="1865" height="726" alt="image" src="https://github.com/user-attachments/assets/89058e3a-f464-4e2e-a0cd-9ee845eee853" />
+
 VPC: 10.0.0.0/16
 
 Public Subnets:
@@ -89,6 +101,45 @@ Internet ✘ App EC2
 
 Internet ✘ RDS
 
+## Internet Gateway and Route Tables
+### Create Internet Gateway:
+Name: three-tier-igw
+
+Attach to: three-tier-vpc
+<img width="1583" height="212" alt="image" src="https://github.com/user-attachments/assets/3b09f19d-199f-4f54-bf6a-d9adffbcb187" />
+
+### Public route table
+Name: public-rt
+
+Route:
+
+0.0.0.0/0 → Internet Gateway
+
+Associate:
+
+Public Subnet 1
+
+Public Subnet 2
+<img width="1522" height="207" alt="image" src="https://github.com/user-attachments/assets/18e96138-df6c-4c18-aff9-a75a6195102b" />
+<img width="1541" height="365" alt="image" src="https://github.com/user-attachments/assets/2ae41894-a114-4279-9061-115dda0ee1ea" />
+
+
+### Private route tables:
+app-private-rt
+<img width="1548" height="345" alt="image" src="https://github.com/user-attachments/assets/f502440f-1020-4450-8528-7cfd881b3829" />
+
+<img width="1532" height="356" alt="image" src="https://github.com/user-attachments/assets/d5f59423-4be8-4c32-8d86-d766f4cef387" />
+
+
+db-private-rt
+<img width="1550" height="342" alt="image" src="https://github.com/user-attachments/assets/7f44dd3c-cd62-4b4f-ba0e-da239f04c745" />
+<img width="1532" height="302" alt="image" src="https://github.com/user-attachments/assets/c53de84e-4784-463d-a7e6-35cebc8584bc" />
+### all Rote table
+<img width="1580" height="410" alt="image" src="https://github.com/user-attachments/assets/4fe49744-4737-446f-8a01-35284620ae66" />
+
+
+
+
 ## All Security Grops
 <img width="1450" height="460" alt="all security grop" src="https://github.com/user-attachments/assets/e57ca8ad-f060-4ca5-b0b9-71bc1e52582b" />
 
@@ -110,7 +161,7 @@ SSH 22 from trusted SG
 ## 4. RDS SG
 MySQL 3306 from app-sg
 <img width="1555" height="248" alt="RDS" src="https://github.com/user-attachments/assets/ade8e2e3-e627-4ae7-adcc-f776e5ba27a3" />
-## 
+
 
 # Phase 7 — Application Load Balancer (ALB)
 Implemented an internet-facing Application Load Balancer (ALB) to provide a secure and scalable public entry point for the AWS 3-tier architecture. The ALB distributes incoming traffic to healthy web tier instances and improves availability across multiple Availability Zones.
