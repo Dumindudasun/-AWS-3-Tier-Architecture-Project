@@ -137,6 +137,11 @@ Supporting future horizontal scaling
 | VPC             | `three-tier-vpc`          |
 | Security Group  | `alb-sg`                  |
 
+<img width="1568" height="267" alt="image" src="https://github.com/user-attachments/assets/0fbf1a74-1d08-4027-bccc-87226b42452b" />
+<img width="1566" height="510" alt="image" src="https://github.com/user-attachments/assets/ca03b111-cd81-434c-a7f1-96b2536f181d" />
+
+
+
 ## Network Mapping
 The ALB was deployed across two public subnets for high availability.
 | Subnet          | Purpose             |
@@ -145,6 +150,8 @@ The ALB was deployed across two public subnets for high availability.
 | Public Subnet 2 | Availability Zone B |
 
 This ensures traffic can continue even if one Availability Zone experiences issues.
+<img width="1540" height="658" alt="image" src="https://github.com/user-attachments/assets/a2ec4897-a486-4b17-967b-4d61e017f9ee" />
+
 
 ## Security Design
 ### ALB Security Group (alb-sg)
@@ -152,6 +159,12 @@ Inbound Rules:
 | Port | Source      | Purpose            |
 | ---- | ----------- | ------------------ |
 | 80   | `0.0.0.0/0` | Public HTTP access |
+<img width="1527" height="307" alt="image" src="https://github.com/user-attachments/assets/063685f3-be65-4ab6-a48b-c3b7a964e34e" />
+
+## Resource map
+<img width="1577" height="522" alt="image" src="https://github.com/user-attachments/assets/a26944ca-a8b3-4d6d-afef-1ccf893f6a96" />
+
+
 
 ### Access Flow
 Internet User → ALB ✅
@@ -185,7 +198,7 @@ If the target becomes unhealthy, the ALB stops sending traffic to it
 
 ## Public Access
 Users access the application using the ALB DNS name.
-http://three-tier-alb-xxxx.us-east-1.elb.amazonaws.com
+http://three-tier-alb-1400396043.us-east-1.elb.amazonaws.com
 
 ## Skills Demonstrated
 AWS Load Balancer Configuration
