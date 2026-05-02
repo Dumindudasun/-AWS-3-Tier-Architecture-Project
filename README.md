@@ -8,6 +8,8 @@ This project demonstrates how real-world applications are structured using separ
 ---
 
 # Architecture
+<img width="1536" height="1024" alt="ChatGPT Image May 2, 2026, 10_17_06 AM (1)" src="https://github.com/user-attachments/assets/6c16b8ab-8956-4463-8489-f7dd0ee32d71" />
+
 
 ```text
 Users
