@@ -109,8 +109,98 @@ MySQL 3306 from app-sg
 <img width="1555" height="248" alt="RDS" src="https://github.com/user-attachments/assets/ade8e2e3-e627-4ae7-adcc-f776e5ba27a3" />
 ## 
 
+# Phase 7 — Application Load Balancer (ALB)
+Implemented an internet-facing Application Load Balancer (ALB) to provide a secure and scalable public entry point for the AWS 3-tier architecture. The ALB distributes incoming traffic to healthy web tier instances and improves availability across multiple Availability Zones.
+
+## Architecture Role
+Internet User → ALB → Web Tier → App Tier → Database Tier
+
+### The ALB is responsible for:
+
+Receiving public HTTP traffic
+
+Routing requests to healthy web servers
+
+Acting as the single public entry point
+
+Improving fault tolerance across multiple subnets
+
+Supporting future horizontal scaling
+
+## Load Balancer Configuration
+| Setting         | Value                     |
+| --------------- | ------------------------- |
+| Name            | `three-tier-alb`          |
+| Type            | Application Load Balancer |
+| Scheme          | Internet-facing           |
+| IP Address Type | IPv4                      |
+| VPC             | `three-tier-vpc`          |
+| Security Group  | `alb-sg`                  |
+
+## Network Mapping
+The ALB was deployed across two public subnets for high availability.
+| Subnet          | Purpose             |
+| --------------- | ------------------- |
+| Public Subnet 1 | Availability Zone A |
+| Public Subnet 2 | Availability Zone B |
+
+This ensures traffic can continue even if one Availability Zone experiences issues.
+
+## Security Design
+### ALB Security Group (alb-sg)
+Inbound Rules:
+| Port | Source      | Purpose            |
+| ---- | ----------- | ------------------ |
+| 80   | `0.0.0.0/0` | Public HTTP access |
+
+### Access Flow
+Internet User → ALB ✅
+ALB → Web Tier ✅
+Internet User → Web Tier Direct ❌
+
+## Target Group Configuration
+Created a target group to route traffic to the web tier instance.
+| Setting           | Value              |
+| ----------------- | ------------------ |
+| Target Group Name | `web-target-group` |
+| Target Type       | Instance           |
+| Protocol          | HTTP               |
+| Port              | 80                 |
+| Registered Target | `web-server`       |
+
+## Health Check Configuration
+Configured health checks to continuously verify backend availability.
+| Setting  | Value                            |
+| -------- | -------------------------------- |
+| Protocol | HTTP                             |
+| Path     | `/`                              |
+| Purpose  | Validate Nginx web server health |
+If the target becomes unhealthy, the ALB stops sending traffic to it
 
 
+## Listener Configuration
+| Protocol | Port | Action                        |
+| -------- | ---- | ----------------------------- |
+| HTTP     | 80   | Forward to `web-target-group` |
 
+## Public Access
+Users access the application using the ALB DNS name.
+http://three-tier-alb-xxxx.us-east-1.elb.amazonaws.com
 
+## Skills Demonstrated
+AWS Load Balancer Configuration
+
+High Availability Design
+
+Target Groups
+
+Health Checks
+
+Traffic Routing
+
+Security Group Hardening
+
+Cloud Networking
+
+Scalable Web Architecture
 
