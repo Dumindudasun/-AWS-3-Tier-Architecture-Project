@@ -180,6 +180,8 @@ Created a target group to route traffic to the web tier instance.
 | Protocol          | HTTP               |
 | Port              | 80                 |
 | Registered Target | `web-server`       |
+<img width="1572" height="718" alt="image" src="https://github.com/user-attachments/assets/1c943da0-2631-4471-9b7d-c10de4d3b9a3" />
+
 
 ## Health Check Configuration
 Configured health checks to continuously verify backend availability.
@@ -189,6 +191,10 @@ Configured health checks to continuously verify backend availability.
 | Path     | `/`                              |
 | Purpose  | Validate Nginx web server health |
 If the target becomes unhealthy, the ALB stops sending traffic to it
+<img width="1580" height="550" alt="image" src="https://github.com/user-attachments/assets/ba02ac38-4b25-4939-a3a6-d9e7fb93fd40" />
+<img width="1540" height="351" alt="image" src="https://github.com/user-attachments/assets/2b188945-1ff6-467e-b69d-ef7f1ee298ac" />
+
+
 
 
 ## Listener Configuration
@@ -199,6 +205,9 @@ If the target becomes unhealthy, the ALB stops sending traffic to it
 ## Public Access
 Users access the application using the ALB DNS name.
 http://three-tier-alb-1400396043.us-east-1.elb.amazonaws.com
+
+<img width="1462" height="770" alt="image" src="https://github.com/user-attachments/assets/f78da49d-907a-41b7-b830-a616bd73960a" />
+
 
 ## Skills Demonstrated
 AWS Load Balancer Configuration
