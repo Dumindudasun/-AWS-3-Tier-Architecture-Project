@@ -323,19 +323,31 @@ nano server.js
 
 ## nano server.js
 const express = require("express");
+
 const app = express();
 
+
 app.get("/api/health", (req, res) => {
+
   res.json({
+  
     status: "App tier running",
+    
     tier: "Application Tier",
+    
     message: "Backend API is working successfully"
+    
   });
+  
 });
 
+
 app.listen(3000, "0.0.0.0", () => {
+
   console.log("App running on port 3000");
+  
 });
+
 # Phase 7 — Application Load Balancer (ALB)
 Implemented an internet-facing Application Load Balancer (ALB) to provide a secure and scalable public entry point for the AWS 3-tier architecture. The ALB distributes incoming traffic to healthy web tier instances and improves availability across multiple Availability Zones.
 
