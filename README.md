@@ -59,6 +59,39 @@ Database Tier (RDS)
 
 ```
 
+
+## Deployment Steps
+1.Created custom VPC
+
+2.Created public and private subnets
+
+3.Attached Internet Gateway
+
+4.Configured route tables
+
+5.Created security groups
+
+6.Launched web tier EC2 instance
+
+7.Launched application tier EC2 instance
+
+8.Created RDS MySQL database
+
+9.Configured Application Load Balancer
+
+10.Tested complete traffic flow
+
+## Security Highlights
+Internet traffic allowed only to ALB
+
+Backend servers not publicly accessible
+
+Database isolated in private subnet
+
+Controlled tier-to-tier communication
+
+Principle of least privilege applied
+
 ## Create VPC
 Region: us-east-1
 
@@ -161,6 +194,73 @@ SSH 22 from trusted SG
 ## 4. RDS SG
 MySQL 3306 from app-sg
 <img width="1555" height="248" alt="RDS" src="https://github.com/user-attachments/assets/ade8e2e3-e627-4ae7-adcc-f776e5ba27a3" />
+
+# Database Tier Deployment (Amazon RDS MySQL)
+Deployed a managed Database Tier using Amazon RDS MySQL as part of the AWS 3-tier architecture. The database was placed in private subnets with restricted access to improve security and align with production best practices.
+
+### The database tier is responsible for:
+
+Storing application data
+
+Managing user records
+
+Handling queries from the application tier
+
+Providing persistent storage
+
+Supporting backups and scalability
+
+## RDS Configuration
+| Setting         | Value            |
+| --------------- | ---------------- |
+| Database Engine | MySQL            |
+| Template        | Free Tier        |
+| DB Identifier   | `three-tier-db`  |
+| Master Username | `admin`          |
+| Instance Class  | `db.t3.micro`    |
+| Public Access   | No               |
+| VPC             | `three-tier-vpc` |
+| Security Group  | `rds-sg`         |
+
+<img width="1541" height="252" alt="image" src="https://github.com/user-attachments/assets/01ad749e-df4e-4fa6-ae71-ac42cd44f691" />
+
+## Private Network Deployment
+The RDS instance was deployed in private database subnets to prevent direct public access.
+
+Internet → Database ❌
+
+App Tier → Database ✅
+
+This ensures only internal application servers can communicate with the database.
+
+## DB Subnet Group
+Created a dedicated DB subnet group spanning multiple Availability Zones for resilience and proper RDS deployment.
+| Subnet Name         | Purpose                           |
+| ------------------- | --------------------------------- |
+| DB Private Subnet 1 | Primary private database subnet   |
+| DB Private Subnet 2 | Secondary private database subnet |
+<img width="1411" height="675" alt="image" src="https://github.com/user-attachments/assets/b215c86c-2700-4ce5-8d8c-fd45a52214c2" />
+
+### Why This Was Required
+RDS subnet groups must span at least two Availability Zones to meet AWS deployment requirements and support high availability options.
+
+## Security Design
+Security Group (rds-sg)
+
+Inboud roule
+| Port | Source   | Purpose                            |
+| ---- | -------- | ---------------------------------- |
+| 3306 | `app-sg` | MySQL access from application tier |
+<img width="1577" height="220" alt="image" src="https://github.com/user-attachments/assets/65f1622f-a698-4c8c-9168-724801df20bc" />
+
+
+## Access Control
+Internet User → RDS ❌
+
+Web Tier → RDS ❌
+
+App Tier → RDS ✅
+
 
 
 # Phase 7 — Application Load Balancer (ALB)
