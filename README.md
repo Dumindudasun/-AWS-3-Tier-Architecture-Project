@@ -418,6 +418,71 @@ Web Tier → app-server ✅
 
 Bastion → app-server ✅
 
+# Web Tier Deployment (EC2 + Nginx)
+Created a dedicated Web Tier EC2 instance to host the frontend layer of the AWS 3-tier architecture. The web server receives user traffic, serves frontend content, and forwards application requests to the backend tier.
+### Architecture Role
+Internet User → ALB → Web Tier → App Tier → Database Tier
+
+Serving static frontend content
+
+Receiving HTTP requests
+
+Acting as the presentation layer
+
+Forwarding backend/API requests
+
+Integrating with the Load Balancer
+
+## EC2 Configuration
+| Setting        | Value                   |
+| -------------- | ----------------------- |
+| Instance Name  | `web-server`            |
+| AMI            | Amazon Linux 2023       |
+| Instance Type  | `t2.micro` / `t3.micro` |
+| VPC            | `three-tier-vpc`        |
+| Subnet         | Public Subnet 1         |
+| Public IP      | Enabled                 |
+| Security Group | `web-sg`                |
+<img width="1542" height="687" alt="image" src="https://github.com/user-attachments/assets/8a7d3212-9903-4536-a456-02f750d37390" />
+
+### Why Public Subnet Was Used
+The web server was placed in a public subnet because it must receive traffic from the Application Load Balancer and serve frontend content to users.
+
+Internet / ALB → Web Tier ✅
+
+### Web Server Setup
+Installed and configured Nginx as the frontend web server.
+### Installation Commands
+sudo dnf update -y
+
+sudo dnf install nginx -y
+
+sudo systemctl start nginx
+
+sudo systemctl enable nginx
+
+## Frontend Page Deployment
+Replaced the default Nginx page with a custom landing page.
+### File Location
+/usr/share/nginx/html/index.html
+### Page Content
+<h1>3-Tier AWS Architecture Project</h1>
+
+<p>Web Tier is running successfully.</p>
+
+## Security Design
+The web tier only accepts required traffic.
+### Inbound Rules
+| Port | Source   | Purpose                         |
+| ---- | -------- | ------------------------------- |
+| 80   | `alb-sg` | HTTP traffic from Load Balancer |
+| 22   | My IP    | Administrative SSH access       |
+<img width="1526" height="343" alt="image" src="https://github.com/user-attachments/assets/a81cb12f-e1ca-419d-b804-28953b7d16cc" />
+
+## Access Flow
+Internet User → ALB → Web Tier ✅
+
+Internet User → Web Tier Direct (optional during testing)
 
 
 # Phase 7 — Application Load Balancer (ALB)
