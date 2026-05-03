@@ -301,6 +301,9 @@ Created a temporary EC2 instance for software installation and backend preparati
 | Security Group | `builder-sg`               |
 | Purpose        | Build backend server image |
 
+<img width="1562" height="668" alt="image" src="https://github.com/user-attachments/assets/e3f3ff5a-5559-4d3e-9781-817de3bc0c61" />
+
+
 ## Step 2 — Backend Application Setup
 
 ### SSH into app-builder
@@ -347,6 +350,75 @@ app.listen(3000, "0.0.0.0", () => {
   console.log("App running on port 3000");
   
 });
+
+### Health Check Endpoint
+/api/health
+
+Example Response:
+
+{
+  "status": "App tier running"
+}
+
+## Process Management
+Configured PM2 for production-like operation.
+
+pm2 start server.js --name app-tier
+
+pm2 save
+
+pm2 startup
+
+### Benefits:
+
+Keeps app running in background
+
+Auto restart on crash
+
+Starts on reboot
+
+## Custom AMI Creation
+Created a reusable machine image from app-builder.
+
+| Setting  | Value                         |
+| -------- | ----------------------------- |
+| AMI Name | `app-server-ready-ami`        |
+| Purpose  | Prebuilt backend server image |
+
+<img width="1505" height="700" alt="image" src="https://github.com/user-attachments/assets/3a855624-adb8-4e31-9082-61fe4c5e7cbf" />
+
+## Final Private App Server
+Launched final application tier server from the custom AMI.
+| Setting        | Value                  |
+| -------------- | ---------------------- |
+| Instance Name  | `app-server`           |
+| Source AMI     | `app-server-ready-ami` |
+| Subnet         | App Private Subnet 1   |
+| Public IP      | Disabled               |
+| Security Group | `app-sg`               |
+<img width="1562" height="700" alt="image" src="https://github.com/user-attachments/assets/2d019207-b74a-4df6-92a4-779331d6d14d" />
+
+
+## Security Design
+The final application server is private and only accepts required internal traffic.
+
+### Inbound Rules
+
+| Port | Source       | Purpose                   |
+| ---- | ------------ | ------------------------- |
+| 3000 | `web-sg`     | Web tier to backend API   |
+| 22   | `bastion-sg` | Administrative SSH access |
+<img width="1505" height="397" alt="image" src="https://github.com/user-attachments/assets/cd30fc8b-0b05-4728-bee2-9f13a1dbe189" />
+
+
+## Restricted Access
+Internet → app-server ❌
+
+Web Tier → app-server ✅
+
+Bastion → app-server ✅
+
+
 
 # Phase 7 — Application Load Balancer (ALB)
 Implemented an internet-facing Application Load Balancer (ALB) to provide a secure and scalable public entry point for the AWS 3-tier architecture. The ALB distributes incoming traffic to healthy web tier instances and improves availability across multiple Availability Zones.
