@@ -261,8 +261,81 @@ Web Tier → RDS ❌
 
 App Tier → RDS ✅
 
+# Application Tier Deployment (AMI-Based Private EC2)
+Implemented a secure and cost-optimized Application Tier by using a temporary public builder instance to install dependencies and configure the backend application. A custom AMI was then created and used to launch the final private application server inside a private subnet.
+## Deployment Strategy
+app-builder (Public Subnet)
+        ↓
+Install Node.js + Backend App
+        ↓
+Create Custom AMI
+        ↓
+Launch app-server (Private Subnet)
+This method avoids NAT Gateway costs while keeping the final application tier private and secure.
 
+## Why This Method Was Used
+Private subnet EC2 instances do not have direct internet access, which prevents package installation using:
 
+sudo dnf update -y
+
+sudo dnf install nodejs
+
+### To solve this efficiently:
+
+Built the application on a temporary public EC2 instance
+
+Installed all required software and dependencies
+
+Created a reusable custom AMI
+
+Launched the final app server privately
+
+## Step 1 — Builder Instance Configuration
+Created a temporary EC2 instance for software installation and backend preparation.
+| Setting        | Value                      |
+| -------------- | -------------------------- |
+| Instance Name  | `app-builder`              |
+| AMI            | Amazon Linux 2023          |
+| Subnet         | Public Subnet 1            |
+| Public IP      | Enabled                    |
+| Security Group | `builder-sg`               |
+| Purpose        | Build backend server image |
+
+## Step 2 — Backend Application Setup
+
+### SSH into app-builder
+ssh -i "C:\Users\User\Downloads\three-tier-key.pem" ec2-user@APP_BUILDER_PUBLIC_IP
+### Installed required software:
+
+sudo dnf update -y
+
+sudo dnf install -y nodejs npm
+
+mkdir app
+
+cd app
+
+npm init -y
+
+npm install express mysql2
+
+nano server.js
+
+## nano server.js
+const express = require("express");
+const app = express();
+
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "App tier running",
+    tier: "Application Tier",
+    message: "Backend API is working successfully"
+  });
+});
+
+app.listen(3000, "0.0.0.0", () => {
+  console.log("App running on port 3000");
+});
 # Phase 7 — Application Load Balancer (ALB)
 Implemented an internet-facing Application Load Balancer (ALB) to provide a secure and scalable public entry point for the AWS 3-tier architecture. The ALB distributes incoming traffic to healthy web tier instances and improves availability across multiple Availability Zones.
 
